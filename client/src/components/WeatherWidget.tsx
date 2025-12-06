@@ -2,9 +2,11 @@ import { useWeather } from '@/lib/weather-context';
 import { WEATHER_CONFIG } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import { Cloud, Sun, Snowflake, MapPin, RefreshCw, Loader2 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 export function WeatherWidget() {
   const { vibe, temp, locationName, isLoading, refreshWeather } = useWeather();
+  const { t } = useTranslation();
 
   const config = WEATHER_CONFIG[vibe];
 
@@ -46,7 +48,7 @@ export function WeatherWidget() {
           </div>
           
           <p className={cn("text-sm mt-1 font-medium transition-colors duration-500", isLoading ? "text-muted-foreground" : config.color)}>
-            {isLoading ? "Updating..." : `Feels ${config.label}`}
+            {isLoading ? t('weather.updating') : t('weather.feels', { vibe: t(`weather.${vibe.toLowerCase()}`) })}
           </p>
         </div>
 

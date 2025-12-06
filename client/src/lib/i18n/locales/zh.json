@@ -1,0 +1,65 @@
+{
+  "app": {
+    "title": "Vibe Closet",
+    "subtitle": "您的智能衣橱助手"
+  },
+  "auth": {
+    "welcome": "欢迎来到 Vibe Closet",
+    "login": "登录",
+    "signup": "注册",
+    "email": "邮箱",
+    "password": "密码",
+    "create_account": "创建账户",
+    "have_account": "已有账户？登录",
+    "no_account": "没有账户？注册",
+    "success": "账户已创建！请检查您的邮箱。",
+    "error": "认证失败"
+  },
+  "nav": {
+    "home": "首页",
+    "closet": "衣橱",
+    "add": "添加"
+  },
+  "dashboard": {
+    "greeting": "早上好",
+    "subtitle": "准备好穿什么了吗？",
+    "todays_look": "今日搭配",
+    "empty_closet": "这种天气下您的衣橱是空的。",
+    "add_clothes": "添加衣物"
+  },
+  "weather": {
+    "current_vibe": "当前氛围",
+    "feels": "感觉 {{vibe}}",
+    "updating": "更新中...",
+    "cold": "冷",
+    "mild": "温和",
+    "warm": "暖"
+  },
+  "closet": {
+    "title": "我的衣橱",
+    "count": "衣橱里有 {{count}} 件单品",
+    "empty_title": "衣橱为空",
+    "empty_desc": "添加单品，开始打造您的数字衣橱。",
+    "add_first": "添加第一件单品"
+  },
+  "upload": {
+    "title": "添加单品",
+    "subtitle": "拍照，打标签，穿上它。",
+    "upload_photo": "上传照片",
+    "change_photo": "更改照片",
+    "tap_to_select": "点击从相册选择",
+    "category": "分类",
+    "select_type": "选择类型",
+    "weather_vibe": "天气氛围",
+    "submit": "添加到衣橱",
+    "success": "单品已添加！",
+    "error_image": "需要图片",
+    "error_tags": "需要标签"
+  },
+  "types": {
+    "Top": "上装",
+    "Bottom": "下装",
+    "Shoes": "鞋履",
+    "Accessory": "配饰"
+  }
+}

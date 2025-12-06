@@ -1,0 +1,65 @@
+{
+  "app": {
+    "title": "Vibe Closet",
+    "subtitle": "Your intelligent wardrobe assistant"
+  },
+  "auth": {
+    "welcome": "Welcome to Vibe Closet",
+    "login": "Sign In",
+    "signup": "Sign Up",
+    "email": "Email",
+    "password": "Password",
+    "create_account": "Create Account",
+    "have_account": "Already have an account? Sign In",
+    "no_account": "Don't have an account? Sign Up",
+    "success": "Account created! Please check your email.",
+    "error": "Authentication failed"
+  },
+  "nav": {
+    "home": "Home",
+    "closet": "Closet",
+    "add": "Add"
+  },
+  "dashboard": {
+    "greeting": "Good Morning",
+    "subtitle": "Ready to get dressed?",
+    "todays_look": "Today's Look",
+    "empty_closet": "Your closet is empty for this vibe.",
+    "add_clothes": "Add Clothes"
+  },
+  "weather": {
+    "current_vibe": "Current Vibe",
+    "feels": "Feels {{vibe}}",
+    "updating": "Updating...",
+    "cold": "Cold",
+    "mild": "Mild",
+    "warm": "Warm"
+  },
+  "closet": {
+    "title": "My Closet",
+    "count": "{{count}} items in your wardrobe",
+    "empty_title": "Closet Empty",
+    "empty_desc": "Start building your digital wardrobe by adding items.",
+    "add_first": "Add First Item"
+  },
+  "upload": {
+    "title": "Add Item",
+    "subtitle": "Snap a pic, tag it, wear it.",
+    "upload_photo": "Upload Photo",
+    "change_photo": "Change Photo",
+    "tap_to_select": "Tap to select from gallery",
+    "category": "Category",
+    "select_type": "Select Type",
+    "weather_vibe": "Weather Vibe",
+    "submit": "Add to Closet",
+    "success": "Item added!",
+    "error_image": "Image required",
+    "error_tags": "Tags required"
+  },
+  "types": {
+    "Top": "Top",
+    "Bottom": "Bottom",
+    "Shoes": "Shoes",
+    "Accessory": "Accessory"
+  }
+}

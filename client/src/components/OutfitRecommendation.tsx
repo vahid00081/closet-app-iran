@@ -7,11 +7,13 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Link } from 'wouter';
+import { useTranslation } from 'react-i18next';
 
 export function OutfitRecommendation() {
   const { vibe } = useWeather();
   const [outfit, setOutfit] = useState<Partial<Record<ClothingType, ClothingItem>>>({});
   const [loading, setLoading] = useState(false);
+  const { t } = useTranslation();
 
   const refreshOutfit = async () => {
     setLoading(true);
@@ -37,14 +39,14 @@ export function OutfitRecommendation() {
           />
           <div className="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-black/80 to-transparent">
             <span className="text-xs font-medium text-white/90 px-2 py-0.5 rounded-full bg-white/10 backdrop-blur-sm border border-white/10">
-              {type}
+              {t(`types.${type}`)}
             </span>
           </div>
         </>
       ) : (
         <div className="w-full h-full flex flex-col items-center justify-center text-muted-foreground/40 gap-2">
           <Shirt className="w-8 h-8" strokeWidth={1.5} />
-          <span className="text-xs">No {type}</span>
+          <span className="text-xs">{t('outfit.no_item', { type: t(`types.${type}`) })}</span>
         </div>
       )}
     </Card>
@@ -53,7 +55,7 @@ export function OutfitRecommendation() {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h3 className="font-display font-semibold text-lg">Today's Look</h3>
+        <h3 className="font-display font-semibold text-lg">{t('dashboard.todays_look')}</h3>
         <Button 
           variant="ghost" 
           size="icon" 
@@ -67,9 +69,9 @@ export function OutfitRecommendation() {
 
       {!hasItems && !loading ? (
         <div className="text-center py-10 border border-dashed border-border rounded-2xl bg-secondary/10">
-          <p className="text-muted-foreground text-sm mb-4">Your closet is empty for this vibe.</p>
+          <p className="text-muted-foreground text-sm mb-4">{t('dashboard.empty_closet')}</p>
           <Link href="/upload">
-            <Button size="sm" variant="outline" className="rounded-full">Add Clothes</Button>
+            <Button size="sm" variant="outline" className="rounded-full">{t('dashboard.add_clothes')}</Button>
           </Link>
         </div>
       ) : (

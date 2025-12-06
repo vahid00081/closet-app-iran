@@ -7,6 +7,8 @@ import { Label } from '@/components/ui/label';
 import { Card } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, Sparkles } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 
 export default function AuthPage() {
   const [isLoading, setIsLoading] = useState(false);
@@ -15,6 +17,7 @@ export default function AuthPage() {
   const [password, setPassword] = useState('');
   const [, setLocation] = useLocation();
   const { toast } = useToast();
+  const { t } = useTranslation();
 
   const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,19 +30,18 @@ export default function AuthPage() {
           password,
         });
         if (error) throw error;
-        toast({ title: "Account created!", description: "Please check your email to confirm." });
+        toast({ title: t('auth.success') });
       } else {
         const { error } = await supabase.auth.signInWithPassword({
           email,
           password,
         });
         if (error) throw error;
-        // Redirect handled by auth state listener in App or manual redirect
         setLocation('/');
       }
     } catch (error: any) {
       toast({ 
-        title: "Authentication failed", 
+        title: t('auth.error'), 
         description: error.message, 
         variant: "destructive" 
       });
@@ -50,6 +52,11 @@ export default function AuthPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-background relative overflow-hidden">
+      {/* Language Switcher */}
+      <div className="absolute top-4 right-4 z-50">
+        <LanguageSwitcher />
+      </div>
+
       {/* Ambient background */}
       <div className="absolute top-[-20%] left-[-20%] w-[500px] h-[500px] bg-primary/20 blur-[120px] rounded-full pointer-events-none" />
       <div className="absolute bottom-[-20%] right-[-20%] w-[500px] h-[500px] bg-secondary/20 blur-[120px] rounded-full pointer-events-none" />
@@ -59,13 +66,13 @@ export default function AuthPage() {
           <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mx-auto mb-4 text-primary">
             <Sparkles size={24} />
           </div>
-          <h1 className="text-2xl font-display font-bold">Welcome to Vibe Closet</h1>
-          <p className="text-muted-foreground text-sm">Your intelligent wardrobe assistant.</p>
+          <h1 className="text-2xl font-display font-bold">{t('auth.welcome')}</h1>
+          <p className="text-muted-foreground text-sm">{t('app.subtitle')}</p>
         </div>
 
         <form onSubmit={handleAuth} className="space-y-4">
           <div className="space-y-2">
-            <Label>Email</Label>
+            <Label>{t('auth.email')}</Label>
             <Input 
               type="email" 
               placeholder="you@example.com"
@@ -76,7 +83,7 @@ export default function AuthPage() {
             />
           </div>
           <div className="space-y-2">
-            <Label>Password</Label>
+            <Label>{t('auth.password')}</Label>
             <Input 
               type="password" 
               placeholder="••••••••"
@@ -88,7 +95,7 @@ export default function AuthPage() {
           </div>
 
           <Button type="submit" className="w-full h-11 rounded-xl" disabled={isLoading}>
-            {isLoading ? <Loader2 className="animate-spin" /> : (isSignUp ? "Create Account" : "Sign In")}
+            {isLoading ? <Loader2 className="animate-spin" /> : (isSignUp ? t('auth.create_account') : t('auth.login'))}
           </Button>
         </form>
 
@@ -98,7 +105,7 @@ export default function AuthPage() {
             onClick={() => setIsSignUp(!isSignUp)}
             className="text-xs text-muted-foreground hover:text-primary transition-colors"
           >
-            {isSignUp ? "Already have an account? Sign In" : "Don't have an account? Sign Up"}
+            {isSignUp ? t('auth.have_account') : t('auth.no_account')}
           </button>
         </div>
       </Card>

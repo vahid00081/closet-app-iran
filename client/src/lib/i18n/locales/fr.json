@@ -1,0 +1,65 @@
+{
+  "app": {
+    "title": "Vibe Closet",
+    "subtitle": "Votre assistant garde-robe intelligent"
+  },
+  "auth": {
+    "welcome": "Bienvenue sur Vibe Closet",
+    "login": "Se Connecter",
+    "signup": "S'inscrire",
+    "email": "Email",
+    "password": "Mot de passe",
+    "create_account": "Créer un compte",
+    "have_account": "Déjà un compte ? Connectez-vous",
+    "no_account": "Pas de compte ? Inscrivez-vous",
+    "success": "Compte créé ! Veuillez vérifier votre email.",
+    "error": "Échec de l'authentification"
+  },
+  "nav": {
+    "home": "Accueil",
+    "closet": "Garde-robe",
+    "add": "Ajouter"
+  },
+  "dashboard": {
+    "greeting": "Bonjour",
+    "subtitle": "Prêt à vous habiller ?",
+    "todays_look": "Look du Jour",
+    "empty_closet": "Votre garde-robe est vide pour ce temps.",
+    "add_clothes": "Ajouter des vêtements"
+  },
+  "weather": {
+    "current_vibe": "Ambiance Actuelle",
+    "feels": "Ressenti {{vibe}}",
+    "updating": "Mise à jour...",
+    "cold": "Froid",
+    "mild": "Doux",
+    "warm": "Chaud"
+  },
+  "closet": {
+    "title": "Ma Garde-robe",
+    "count": "{{count}} articles dans votre armoire",
+    "empty_title": "Garde-robe Vide",
+    "empty_desc": "Commencez à construire votre garde-robe numérique en ajoutant des articles.",
+    "add_first": "Ajouter le premier article"
+  },
+  "upload": {
+    "title": "Ajouter un article",
+    "subtitle": "Prenez une photo, taguez-la, portez-la.",
+    "upload_photo": "Télécharger une photo",
+    "change_photo": "Changer la photo",
+    "tap_to_select": "Appuyez pour choisir dans la galerie",
+    "category": "Catégorie",
+    "select_type": "Sélectionner le type",
+    "weather_vibe": "Ambiance Météo",
+    "submit": "Ajouter à la garde-robe",
+    "success": "Article ajouté !",
+    "error_image": "Image requise",
+    "error_tags": "Tags requis"
+  },
+  "types": {
+    "Top": "Haut",
+    "Bottom": "Bas",
+    "Shoes": "Chaussures",
+    "Accessory": "Accessoire"
+  }
+}

@@ -9,11 +9,13 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useAuth } from '@/lib/auth-context';
 import { Upload, X, Image as ImageIcon, Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { useTranslation } from 'react-i18next';
 
 export default function UploadPage() {
   const [, setLocation] = useLocation();
   const { user } = useAuth();
   const { toast } = useToast();
+  const { t } = useTranslation();
   const fileInputRef = useRef<HTMLInputElement>(null);
   
   const [imageFile, setImageFile] = useState<File | null>(null);
@@ -44,12 +46,12 @@ export default function UploadPage() {
     e.preventDefault();
     
     if (!imageFile || !user) {
-      toast({ title: "Error", description: "Image and login required.", variant: "destructive" });
+      toast({ title: t('auth.error'), description: t('upload.error_image'), variant: "destructive" });
       return;
     }
     
     if (selectedTags.length === 0) {
-      toast({ title: "Tags required", description: "Select at least one weather vibe.", variant: "destructive" });
+      toast({ title: t('upload.error_tags'), variant: "destructive" });
       return;
     }
 
@@ -58,18 +60,18 @@ export default function UploadPage() {
     setIsUploading(false);
 
     if (result) {
-      toast({ title: "Item added!", description: "Your closet is growing." });
+      toast({ title: t('upload.success') });
       setLocation('/closet');
     } else {
-      toast({ title: "Upload failed", description: "Could not save item.", variant: "destructive" });
+      toast({ title: "Upload failed", variant: "destructive" });
     }
   };
 
   return (
     <div className="space-y-6 pb-20 animate-in slide-in-from-bottom-8 duration-500">
       <header>
-        <h1 className="text-2xl font-display font-bold">Add Item</h1>
-        <p className="text-muted-foreground text-sm">Snap a pic, tag it, wear it.</p>
+        <h1 className="text-2xl font-display font-bold">{t('upload.title')}</h1>
+        <p className="text-muted-foreground text-sm">{t('upload.subtitle')}</p>
       </header>
 
       <form onSubmit={handleSubmit} className="space-y-6">
@@ -83,7 +85,7 @@ export default function UploadPage() {
             <>
               <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
               <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
-                <span className="text-white font-medium flex items-center gap-2"><Upload size={18} /> Change Photo</span>
+                <span className="text-white font-medium flex items-center gap-2"><Upload size={18} /> {t('upload.change_photo')}</span>
               </div>
             </>
           ) : (
@@ -91,8 +93,8 @@ export default function UploadPage() {
               <div className="w-16 h-16 rounded-full bg-secondary flex items-center justify-center mx-auto mb-4 text-muted-foreground">
                 <ImageIcon size={32} strokeWidth={1.5} />
               </div>
-              <p className="font-medium text-foreground">Upload Photo</p>
-              <p className="text-xs text-muted-foreground mt-1">Tap to select from gallery</p>
+              <p className="font-medium text-foreground">{t('upload.upload_photo')}</p>
+              <p className="text-xs text-muted-foreground mt-1">{t('upload.tap_to_select')}</p>
             </div>
           )}
           <Input 
@@ -106,23 +108,23 @@ export default function UploadPage() {
 
         {/* Category Selection */}
         <div className="space-y-2">
-          <Label>Category</Label>
+          <Label>{t('upload.category')}</Label>
           <Select value={type} onValueChange={(v) => setType(v as ClothingType)}>
             <SelectTrigger className="h-12 rounded-xl bg-secondary/30 border-border/50">
-              <SelectValue placeholder="Select Type" />
+              <SelectValue placeholder={t('upload.select_type')} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="Top">Top</SelectItem>
-              <SelectItem value="Bottom">Bottom</SelectItem>
-              <SelectItem value="Shoes">Shoes</SelectItem>
-              <SelectItem value="Accessory">Accessory</SelectItem>
+              <SelectItem value="Top">{t('types.Top')}</SelectItem>
+              <SelectItem value="Bottom">{t('types.Bottom')}</SelectItem>
+              <SelectItem value="Shoes">{t('types.Shoes')}</SelectItem>
+              <SelectItem value="Accessory">{t('types.Accessory')}</SelectItem>
             </SelectContent>
           </Select>
         </div>
 
         {/* Weather Tags */}
         <div className="space-y-3">
-          <Label>Weather Vibe</Label>
+          <Label>{t('upload.weather_vibe')}</Label>
           <div className="grid grid-cols-3 gap-3">
             {(Object.entries(WEATHER_CONFIG) as [WeatherVibe, any][]).map(([key, config]) => {
               const isSelected = selectedTags.includes(key);
@@ -135,7 +137,7 @@ export default function UploadPage() {
                     ${isSelected ? `bg-primary/10 border-primary text-primary` : 'bg-secondary/20 border-transparent hover:bg-secondary/40 text-muted-foreground'}
                   `}
                 >
-                  <span className="text-sm font-medium">{key}</span>
+                  <span className="text-sm font-medium">{t(`weather.${key.toLowerCase()}`)}</span>
                   <span className="text-xs opacity-70">{config.temp}°C</span>
                 </div>
               );
@@ -144,7 +146,7 @@ export default function UploadPage() {
         </div>
 
         <Button type="submit" className="w-full h-12 rounded-xl text-base font-medium mt-4" disabled={isUploading}>
-          {isUploading ? <Loader2 className="animate-spin" /> : "Add to Closet"}
+          {isUploading ? <Loader2 className="animate-spin" /> : t('upload.submit')}
         </Button>
       </form>
     </div>

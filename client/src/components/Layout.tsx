@@ -2,19 +2,27 @@ import React from 'react';
 import { Link, useLocation } from 'wouter';
 import { Home, Shirt, PlusCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useTranslation } from 'react-i18next';
+import { LanguageSwitcher } from './LanguageSwitcher';
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const [location] = useLocation();
+  const { t } = useTranslation();
 
   const navItems = [
-    { href: '/', icon: Home, label: 'Home' },
-    { href: '/closet', icon: Shirt, label: 'Closet' },
-    { href: '/upload', icon: PlusCircle, label: 'Add' },
+    { href: '/', icon: Home, label: t('nav.home') },
+    { href: '/closet', icon: Shirt, label: t('nav.closet') },
+    { href: '/upload', icon: PlusCircle, label: t('nav.add') },
   ];
 
   return (
-    <div className="min-h-screen bg-background text-foreground flex flex-col max-w-md mx-auto shadow-2xl overflow-hidden border-x border-border">
-      <main className="flex-1 overflow-y-auto p-6 pb-24 scrollbar-hide">
+    <div className="min-h-screen bg-background text-foreground flex flex-col max-w-md mx-auto shadow-2xl overflow-hidden border-x border-border relative">
+      {/* Top Bar for Language Switcher */}
+      <div className="absolute top-4 right-4 z-50">
+        <LanguageSwitcher />
+      </div>
+
+      <main className="flex-1 overflow-y-auto p-6 pb-24 scrollbar-hide pt-12">
         {children}
       </main>
       

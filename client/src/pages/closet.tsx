@@ -5,11 +5,13 @@ import { Trash2, Tag, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'wouter';
 import { useToast } from '@/hooks/use-toast';
+import { useTranslation } from 'react-i18next';
 
 export default function ClosetPage() {
   const [items, setItems] = useState<ClothingItem[]>([]);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
+  const { t } = useTranslation();
 
   const loadItems = async () => {
     setLoading(true);
@@ -48,10 +50,10 @@ export default function ClosetPage() {
         <div className="w-20 h-20 bg-secondary/50 rounded-full flex items-center justify-center mb-4">
           <Tag className="w-10 h-10 text-muted-foreground/50" />
         </div>
-        <h2 className="text-xl font-display font-semibold">Closet Empty</h2>
-        <p className="text-muted-foreground max-w-[200px]">Start building your digital wardrobe by adding items.</p>
+        <h2 className="text-xl font-display font-semibold">{t('closet.empty_title')}</h2>
+        <p className="text-muted-foreground max-w-[200px]">{t('closet.empty_desc')}</p>
         <Link href="/upload">
-          <Button className="mt-4 rounded-full px-8">Add First Item</Button>
+          <Button className="mt-4 rounded-full px-8">{t('closet.add_first')}</Button>
         </Link>
       </div>
     );
@@ -60,8 +62,8 @@ export default function ClosetPage() {
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
       <header>
-        <h1 className="text-2xl font-display font-bold">My Closet</h1>
-        <p className="text-muted-foreground text-sm">{items.length} items in your wardrobe</p>
+        <h1 className="text-2xl font-display font-bold">{t('closet.title')}</h1>
+        <p className="text-muted-foreground text-sm">{t('closet.count', { count: items.length })}</p>
       </header>
 
       <div className="grid grid-cols-2 gap-4">
@@ -83,12 +85,12 @@ export default function ClosetPage() {
               
               <div className="translate-y-[10px] group-hover:translate-y-0 transition-all duration-300">
                 <span className="text-xs font-medium text-white bg-white/20 backdrop-blur-md px-2 py-1 rounded-md border border-white/10 inline-block mb-1">
-                  {item.type}
+                  {t(`types.${item.type}`)}
                 </span>
                 <div className="flex flex-wrap gap-1">
                   {item.weatherTags.map(tag => (
                     <span key={tag} className="text-[10px] bg-black/50 text-white/80 px-1.5 py-0.5 rounded-sm">
-                      {tag}
+                      {t(`weather.${tag.toLowerCase()}`)}
                     </span>
                   ))}
                 </div>

@@ -1,0 +1,65 @@
+{
+  "app": {
+    "title": "Vibe Closet",
+    "subtitle": "Tu asistente de vestuario inteligente"
+  },
+  "auth": {
+    "welcome": "Bienvenido a Vibe Closet",
+    "login": "Iniciar Sesión",
+    "signup": "Registrarse",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "create_account": "Crear Cuenta",
+    "have_account": "¿Ya tienes cuenta? Inicia sesión",
+    "no_account": "¿No tienes cuenta? Regístrate",
+    "success": "¡Cuenta creada! Por favor revisa tu correo.",
+    "error": "Error de autenticación"
+  },
+  "nav": {
+    "home": "Inicio",
+    "closet": "Armario",
+    "add": "Añadir"
+  },
+  "dashboard": {
+    "greeting": "Buenos Días",
+    "subtitle": "¿Listo para vestirte?",
+    "todays_look": "Look de Hoy",
+    "empty_closet": "Tu armario está vacío para este clima.",
+    "add_clothes": "Añadir Ropa"
+  },
+  "weather": {
+    "current_vibe": "Vibe Actual",
+    "feels": "Se siente {{vibe}}",
+    "updating": "Actualizando...",
+    "cold": "Frío",
+    "mild": "Templado",
+    "warm": "Cálido"
+  },
+  "closet": {
+    "title": "Mi Armario",
+    "count": "{{count}} artículos en tu armario",
+    "empty_title": "Armario Vacío",
+    "empty_desc": "Empieza a construir tu armario digital añadiendo artículos.",
+    "add_first": "Añadir Primer Artículo"
+  },
+  "upload": {
+    "title": "Añadir Artículo",
+    "subtitle": "Toma una foto, etiquétala, úsala.",
+    "upload_photo": "Subir Foto",
+    "change_photo": "Cambiar Foto",
+    "tap_to_select": "Toca para seleccionar de la galería",
+    "category": "Categoría",
+    "select_type": "Seleccionar Tipo",
+    "weather_vibe": "Vibe del Clima",
+    "submit": "Añadir al Armario",
+    "success": "¡Artículo añadido!",
+    "error_image": "Imagen requerida",
+    "error_tags": "Etiquetas requeridas"
+  },
+  "types": {
+    "Top": "Superior",
+    "Bottom": "Inferior",
+    "Shoes": "Zapatos",
+    "Accessory": "Accesorio"
+  }
+}
