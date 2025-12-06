@@ -13,13 +13,11 @@ export function OutfitRecommendation() {
   const [outfit, setOutfit] = useState<Partial<Record<ClothingType, ClothingItem>>>({});
   const [loading, setLoading] = useState(false);
 
-  const refreshOutfit = () => {
+  const refreshOutfit = async () => {
     setLoading(true);
-    // Fake delay for "thinking" feel
-    setTimeout(() => {
-      setOutfit(getRecommendation(vibe));
-      setLoading(false);
-    }, 600);
+    const newOutfit = await getRecommendation(vibe);
+    setOutfit(newOutfit);
+    setLoading(false);
   };
 
   useEffect(() => {

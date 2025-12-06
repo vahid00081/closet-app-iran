@@ -1,21 +1,46 @@
 import { useEffect, useState } from 'react';
 import { getItems, deleteItem } from '@/lib/closet-storage';
 import { ClothingItem } from '@/lib/types';
-import { Trash2, Tag } from 'lucide-react';
+import { Trash2, Tag, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'wouter';
+import { useToast } from '@/hooks/use-toast';
 
 export default function ClosetPage() {
   const [items, setItems] = useState<ClothingItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const { toast } = useToast();
+
+  const loadItems = async () => {
+    setLoading(true);
+    const data = await getItems();
+    setItems(data);
+    setLoading(false);
+  };
 
   useEffect(() => {
-    setItems(getItems());
+    loadItems();
   }, []);
 
-  const handleDelete = (id: string) => {
-    deleteItem(id);
-    setItems(getItems());
+  const handleDelete = async (id: string, imagePath?: string) => {
+    // Optimistic update
+    const originalItems = [...items];
+    setItems(items.filter(item => item.id !== id));
+    
+    await deleteItem(id, imagePath);
+    toast({ title: "Item deleted" });
+    
+    // Verify sync
+    loadItems();
   };
+
+  if (loading) {
+    return (
+      <div className="h-full flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-muted-foreground" />
+      </div>
+    );
+  }
 
   if (items.length === 0) {
     return (
@@ -50,7 +75,7 @@ export default function ClosetPage() {
                   variant="destructive" 
                   size="icon" 
                   className="h-8 w-8 rounded-full opacity-0 group-hover:opacity-100 transition-all translate-y-[-10px] group-hover:translate-y-0"
-                  onClick={() => handleDelete(item.id)}
+                  onClick={() => handleDelete(item.id, item.imagePath)}
                 >
                   <Trash2 size={14} />
                 </Button>

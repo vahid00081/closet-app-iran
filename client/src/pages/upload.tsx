@@ -6,22 +6,26 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Upload, X, Image as ImageIcon } from 'lucide-react';
+import { useAuth } from '@/lib/auth-context';
+import { Upload, X, Image as ImageIcon, Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 export default function UploadPage() {
   const [, setLocation] = useLocation();
+  const { user } = useAuth();
   const { toast } = useToast();
   const fileInputRef = useRef<HTMLInputElement>(null);
   
+  const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [type, setType] = useState<ClothingType>('Top');
   const [selectedTags, setSelectedTags] = useState<WeatherVibe[]>([]);
+  const [isUploading, setIsUploading] = useState(false);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      setImageFile(file);
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagePreview(reader.result as string);
@@ -36,11 +40,11 @@ export default function UploadPage() {
     );
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!imagePreview) {
-      toast({ title: "Image required", description: "Please upload a photo of your item.", variant: "destructive" });
+    if (!imageFile || !user) {
+      toast({ title: "Error", description: "Image and login required.", variant: "destructive" });
       return;
     }
     
@@ -49,14 +53,16 @@ export default function UploadPage() {
       return;
     }
 
-    saveItem({
-      imageUrl: imagePreview,
-      type,
-      weatherTags: selectedTags
-    });
+    setIsUploading(true);
+    const result = await saveItem(imageFile, type, selectedTags, user.id);
+    setIsUploading(false);
 
-    toast({ title: "Item added!", description: "Your closet is growing." });
-    setLocation('/closet');
+    if (result) {
+      toast({ title: "Item added!", description: "Your closet is growing." });
+      setLocation('/closet');
+    } else {
+      toast({ title: "Upload failed", description: "Could not save item.", variant: "destructive" });
+    }
   };
 
   return (
@@ -137,8 +143,8 @@ export default function UploadPage() {
           </div>
         </div>
 
-        <Button type="submit" className="w-full h-12 rounded-xl text-base font-medium mt-4">
-          Add to Closet
+        <Button type="submit" className="w-full h-12 rounded-xl text-base font-medium mt-4" disabled={isUploading}>
+          {isUploading ? <Loader2 className="animate-spin" /> : "Add to Closet"}
         </Button>
       </form>
     </div>

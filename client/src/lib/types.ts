@@ -1,14 +1,14 @@
-
 export type WeatherVibe = 'Cold' | 'Mild' | 'Warm';
 
 export type ClothingType = 'Top' | 'Bottom' | 'Shoes' | 'Accessory';
 
 export type ClothingItem = {
   id: string;
-  imageUrl: string; // In a real app this would be a file path or URL, for mock we might use data URLs
+  imageUrl: string;
   type: ClothingType;
   weatherTags: WeatherVibe[];
   createdAt: number;
+  imagePath?: string; // Path in Supabase Storage bucket (for deletion)
 };
 
 export const WEATHER_CONFIG = {
