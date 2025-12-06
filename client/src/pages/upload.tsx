@@ -56,14 +56,19 @@ export default function UploadPage() {
     }
 
     setIsUploading(true);
-    const result = await saveItem(imageFile, type, selectedTags, user.id);
-    setIsUploading(false);
-
-    if (result) {
+    try {
+      await saveItem(imageFile, type, selectedTags, user.id);
       toast({ title: t('upload.success') });
       setLocation('/closet');
-    } else {
-      toast({ title: "Upload failed", variant: "destructive" });
+    } catch (error: any) {
+      console.error("Upload failed in UI:", error);
+      toast({ 
+        title: "Upload Failed", 
+        description: error.message || "Check console for details", 
+        variant: "destructive" 
+      });
+    } finally {
+      setIsUploading(false);
     }
   };
 

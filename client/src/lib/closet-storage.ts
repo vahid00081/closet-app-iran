@@ -1,11 +1,6 @@
 import { supabase } from './supabase';
 import { ClothingItem, ClothingType, WeatherVibe } from './types';
 
-// We assume a table 'clothing_items' exists with columns:
-// id (uuid), user_id (uuid), image_path (text), type (text), weather_tags (text[]), created_at (timestamp)
-
-// We assume a storage bucket 'closet-images' exists.
-
 export const getItems = async (): Promise<ClothingItem[]> => {
   const { data, error } = await supabase
     .from('clothing_items')
@@ -17,8 +12,6 @@ export const getItems = async (): Promise<ClothingItem[]> => {
     return [];
   }
 
-  // Transform data to match ClothingItem interface if needed
-  // Assuming image_path is stored, we need to get the public URL
   return data.map((item: any) => {
     const { data: publicUrlData } = supabase.storage
       .from('closet-images')
@@ -30,7 +23,7 @@ export const getItems = async (): Promise<ClothingItem[]> => {
       type: item.type as ClothingType,
       weatherTags: item.weather_tags as WeatherVibe[],
       createdAt: new Date(item.created_at).getTime(),
-      imagePath: item.image_path // Keep this for deletion
+      imagePath: item.image_path
     };
   });
 };
@@ -40,69 +33,80 @@ export const saveItem = async (
   type: ClothingType, 
   weatherTags: WeatherVibe[],
   userId: string
-): Promise<ClothingItem | null> => {
-  try {
-    // 1. Upload Image
-    // Clean file name to avoid path issues
-    const fileExt = file.name.split('.').pop();
-    // Use a flat structure "userId-timestamp-random.ext" to avoid folder permission complexities if policies are strict
-    const fileName = `${userId}-${Date.now()}-${Math.floor(Math.random() * 1000)}.${fileExt}`;
-    const filePath = fileName; 
+): Promise<ClothingItem> => {
+  // 1. Upload Image
+  const fileExt = file.name.split('.').pop();
+  const fileName = `${userId}-${Date.now()}-${Math.floor(Math.random() * 1000)}.${fileExt}`;
+  const filePath = fileName; 
 
-    const { error: uploadError } = await supabase.storage
-      .from('closet-images')
-      .upload(filePath, file, {
-        cacheControl: '3600',
-        upsert: false
-      });
+  console.log("Attempting upload to 'closet-images' bucket:", filePath);
 
-    if (uploadError) {
-      console.error("Supabase Storage Upload Error:", uploadError);
-      throw uploadError;
-    }
+  const { error: uploadError } = await supabase.storage
+    .from('closet-images')
+    .upload(filePath, file, {
+      cacheControl: '3600',
+      upsert: false
+    });
 
-    // 2. Insert Record
-    const { data, error: insertError } = await supabase
-      .from('clothing_items')
-      .insert([
-        {
-          user_id: userId,
-          image_path: filePath,
-          type,
-          weather_tags: weatherTags,
-        }
-      ])
-      .select()
-      .single();
-
-    if (insertError) {
-       console.error("Supabase DB Insert Error:", insertError);
-       throw insertError;
-    }
-
-    // 3. Return formatted item
-    const { data: publicUrlData } = supabase.storage
-      .from('closet-images')
-      .getPublicUrl(filePath);
-
-    return {
-      id: data.id,
-      imageUrl: publicUrlData.publicUrl,
-      type: data.type as ClothingType,
-      weatherTags: data.weather_tags as WeatherVibe[],
-      createdAt: new Date(data.created_at).getTime(),
-      imagePath: filePath
-    };
-
-  } catch (error) {
-    console.error('Error saving item:', error);
-    return null;
+  if (uploadError) {
+    console.error("❌ Supabase Storage Upload FAILED:", {
+      message: uploadError.message,
+      name: uploadError.name,
+      // @ts-ignore
+      statusCode: uploadError.statusCode,
+    });
+    throw new Error(`Storage Upload Failed: ${uploadError.message}`);
   }
+
+  console.log("✅ Upload successful. Inserting database record...");
+
+  // 2. Insert Record
+  const { data, error: insertError } = await supabase
+    .from('clothing_items')
+    .insert([
+      {
+        user_id: userId,
+        image_path: filePath,
+        type,
+        weather_tags: weatherTags,
+      }
+    ])
+    .select()
+    .single();
+
+  if (insertError) {
+     console.error("❌ Supabase DB Insert FAILED:", {
+       message: insertError.message,
+       details: insertError.details,
+       hint: insertError.hint,
+       code: insertError.code
+     });
+     
+     // Cleanup: If DB fails, try to delete the uploaded image to avoid orphans
+     await supabase.storage.from('closet-images').remove([filePath]);
+     
+     throw new Error(`Database Insert Failed: ${insertError.message}`);
+  }
+
+  console.log("✅ Database insert successful.");
+
+  // 3. Return formatted item
+  const { data: publicUrlData } = supabase.storage
+    .from('closet-images')
+    .getPublicUrl(filePath);
+
+  return {
+    id: data.id,
+    imageUrl: publicUrlData.publicUrl,
+    type: data.type as ClothingType,
+    weatherTags: data.weather_tags as WeatherVibe[],
+    createdAt: new Date(data.created_at).getTime(),
+    imagePath: filePath
+  };
 };
 
 export const deleteItem = async (id: string, imagePath?: string) => {
   try {
-    // 1. Delete from DB
     const { error: dbError } = await supabase
       .from('clothing_items')
       .delete()
@@ -110,7 +114,6 @@ export const deleteItem = async (id: string, imagePath?: string) => {
 
     if (dbError) throw dbError;
 
-    // 2. Delete from Storage (if path provided)
     if (imagePath) {
       const { error: storageError } = await supabase.storage
         .from('closet-images')
@@ -120,13 +123,11 @@ export const deleteItem = async (id: string, imagePath?: string) => {
     }
   } catch (error) {
     console.error('Error deleting item:', error);
+    throw error; 
   }
 };
 
 export const getRecommendation = async (vibe: WeatherVibe): Promise<Partial<Record<ClothingType, ClothingItem>>> => {
-  // Since we need to filter by array contains, Supabase has an operator for that.
-  // .contains('weather_tags', [vibe])
-  
   const { data, error } = await supabase
     .from('clothing_items')
     .select('*')
