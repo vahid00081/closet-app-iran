@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'wouter';
-import { Home, Shirt, PlusCircle } from 'lucide-react';
+import { Home, Shirt, PlusCircle, Settings } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useTranslation } from 'react-i18next';
 import { LanguageSwitcher } from './LanguageSwitcher';
@@ -13,6 +13,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
     { href: '/', icon: Home, label: t('nav.home') },
     { href: '/closet', icon: Shirt, label: t('nav.closet') },
     { href: '/upload', icon: PlusCircle, label: t('nav.add') },
+    { href: '/settings', icon: Settings, label: 'Settings' },
   ];
 
   return (

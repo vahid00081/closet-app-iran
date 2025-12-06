@@ -10,6 +10,7 @@ import { Loader2 } from "lucide-react";
 import Dashboard from "@/pages/dashboard";
 import ClosetPage from "@/pages/closet";
 import UploadPage from "@/pages/upload";
+import SettingsPage from "@/pages/settings";
 import AuthPage from "@/pages/auth";
 import NotFound from "@/pages/not-found";
 import React from "react";
@@ -55,6 +56,10 @@ function Router() {
       
       <Route path="/upload">
         <ProtectedRoute component={UploadPage} />
+      </Route>
+
+      <Route path="/settings">
+        <ProtectedRoute component={SettingsPage} />
       </Route>
       
       <Route component={NotFound} />
