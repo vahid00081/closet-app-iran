@@ -25,12 +25,25 @@ export default function AuthPage() {
 
     try {
       if (isSignUp) {
-        const { error } = await supabase.auth.signUp({
+        const { data, error } = await supabase.auth.signUp({
           email,
           password,
         });
+        
         if (error) throw error;
-        toast({ title: t('auth.success') });
+
+        // If session exists immediately, it means email confirmation is OFF.
+        if (data.session) {
+           toast({ title: t('auth.success_login', "Account created! Logging in...") });
+           setLocation('/');
+        } else {
+           // Email confirmation IS required
+           toast({ 
+             title: t('auth.check_email', "Please check your email to confirm your account."), 
+             description: "If you want to skip this, disable 'Confirm Email' in your Supabase Dashboard.",
+           });
+        }
+
       } else {
         const { error } = await supabase.auth.signInWithPassword({
           email,
@@ -107,6 +120,12 @@ export default function AuthPage() {
           >
             {isSignUp ? t('auth.have_account') : t('auth.no_account')}
           </button>
+        </div>
+        
+        <div className="text-[10px] text-muted-foreground text-center border-t pt-4 border-border/30">
+          {isSignUp && (
+            <p>Note: To skip email confirmation, disable "Confirm Email" in your Supabase Auth settings.</p>
+          )}
         </div>
       </Card>
     </div>

@@ -43,15 +43,23 @@ export const saveItem = async (
 ): Promise<ClothingItem | null> => {
   try {
     // 1. Upload Image
+    // Clean file name to avoid path issues
     const fileExt = file.name.split('.').pop();
-    const fileName = `${userId}/${Math.random()}.${fileExt}`;
-    const filePath = `${fileName}`;
+    // Use a flat structure "userId-timestamp-random.ext" to avoid folder permission complexities if policies are strict
+    const fileName = `${userId}-${Date.now()}-${Math.floor(Math.random() * 1000)}.${fileExt}`;
+    const filePath = fileName; 
 
     const { error: uploadError } = await supabase.storage
       .from('closet-images')
-      .upload(filePath, file);
+      .upload(filePath, file, {
+        cacheControl: '3600',
+        upsert: false
+      });
 
-    if (uploadError) throw uploadError;
+    if (uploadError) {
+      console.error("Supabase Storage Upload Error:", uploadError);
+      throw uploadError;
+    }
 
     // 2. Insert Record
     const { data, error: insertError } = await supabase
@@ -67,7 +75,10 @@ export const saveItem = async (
       .select()
       .single();
 
-    if (insertError) throw insertError;
+    if (insertError) {
+       console.error("Supabase DB Insert Error:", insertError);
+       throw insertError;
+    }
 
     // 3. Return formatted item
     const { data: publicUrlData } = supabase.storage
