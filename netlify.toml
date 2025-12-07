@@ -1,5 +1,4 @@
-[build]
-  base = "client" # Netlify را مجبور می کند که تمام دستورات را از پوشه client/ اجرا کند
+[build]  
   command = "npm run build"
   publish = "client/dist" # Netlify را مجبور می کند که خروجی نهایی را از اینجا بخواند
 
