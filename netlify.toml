@@ -1,0 +1,9 @@
+[build]
+  base = "client" # Netlify را مجبور می کند که تمام دستورات را از پوشه client/ اجرا کند
+  command = "npm run build"
+  publish = "client/dist" # Netlify را مجبور می کند که خروجی نهایی را از اینجا بخواند
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
