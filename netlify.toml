@@ -1,6 +1,6 @@
-[build]  
+[build]
   command = "npm run build"
-  publish = "client/dist" # Netlify را مجبور می کند که خروجی نهایی را از اینجا بخواند
+  publish = "client/dist" # آدرس درست نسبت به ریشه مخزن
 
 [[redirects]]
   from = "/*"
