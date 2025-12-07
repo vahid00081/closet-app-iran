@@ -6,6 +6,9 @@ import runtimeErrorOverlay from "@replit/vite-plugin-runtime-error-modal";
 import { metaImagesPlugin } from "./vite-plugin-meta-images";
 
 export default defineConfig({
+  // تنظیم Base URL به صورت نسبی (حل مشکل استایل‌ها در Deploy)
+  base: "./",
+
   plugins: [
     react(),
     runtimeErrorOverlay(),
@@ -25,6 +28,7 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
+      // این Alias ها از دایرکتوری client اجرا می‌شوند
       "@": path.resolve(import.meta.dirname, "client", "src"),
       "@shared": path.resolve(import.meta.dirname, "shared"),
       "@assets": path.resolve(import.meta.dirname, "attached_assets"),
@@ -35,11 +39,16 @@ export default defineConfig({
       plugins: [],
     },
   },
+  // تنظیم ریشه (Root) برای Vite
   root: path.resolve(import.meta.dirname, "client"),
+
+  // بلوک Build ادغام شده و نهایی
   build: {
-    outDir: path.resolve(import.meta.dirname, "dist/public"),
+    // خروجی نسبت به پوشه 'client' به 'dist/public' می‌رود
+    outDir: "../dist/public",
     emptyOutDir: true,
   },
+
   server: {
     host: "0.0.0.0",
     allowedHosts: true,
