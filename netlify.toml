@@ -1,6 +1,6 @@
 [build]
   command = "npm run build"
-  publish = "client/dist" # آدرس درست نسبت به ریشه مخزن
+  publish = "dist/public" # <-- آدرس نهایی را به آدرس تولید شده توسط Build تغییر دهید
 
 [[redirects]]
   from = "/*"
