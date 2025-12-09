@@ -21,7 +21,7 @@ const DEFAULT_LAT = 35.6892;
 const DEFAULT_LON = 51.389;
 
 // 🛑🛑🛑 کلید API واقعی شما 🛑🛑🛑
-const API_KEY = "ca53465d9ef90a230e9ec169fbbb662a";
+const API_KEY = "6af996c2d896c8a52dba150da6218571";
 export function WeatherProvider({ children }: { children: React.ReactNode }) {
       // ✅ اصلاح: تعریف state با undefined برای مطابقت با Interface
       const [temp, setTemp] = useState<number | undefined>(undefined);
