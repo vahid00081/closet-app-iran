@@ -1,22 +1,19 @@
 // client/src/lib/types.ts
 
-// ✅ اصلاح خطای "is not exported": اضافه شدن export
+// ✅ اصلاح: اضافه شدن export برای حل خطای "is not exported"
 export type WeatherVibe = "Cold" | "Mild" | "Warm";
 
 export type ClothingType = "Top" | "Bottom" | "Shoes" | "Accessory";
 
-// یک نوع پایه برای آیتم‌های کمد لباس
 export type ClothingItem = {
   id: string;
   imageUrl: string;
   type: ClothingType;
-  // از WeatherVibe که در بالا تعریف شده، استفاده می‌کند
   weatherTags: WeatherVibe[];
   createdAt: number;
   imagePath?: string;
 };
 
-// کانفیگ برای ویجت آب و هوا
 export const WEATHER_CONFIG = {
   Cold: {
     temp: 5,

@@ -16,25 +16,32 @@ import NotFound from "@/pages/not-found";
 import React from "react";
 
 // Wrapper for protected routes
-function ProtectedRoute({ component: Component }: { component: React.ComponentType }) {
+function ProtectedRoute({
+  component: Component,
+}: {
+  component: React.ComponentType;
+}) {
   const { user, loading } = useAuth();
   const [, setLocation] = useLocation();
 
   React.useEffect(() => {
+    // اگر بارگذاری تمام شد و کاربری وجود نداشت، به صفحه احراز هویت برو
     if (!loading && !user) {
       setLocation("/auth");
     }
   }, [user, loading, setLocation]);
 
   if (loading) {
+    // نمایش لودر در طول بارگذاری اولیه یا تلاش برای احراز هویت
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <Loader2 className="animate-spin" />
+        <Loader2 className="w-8 h-8 animate-spin text-muted-foreground" />
       </div>
     );
   }
 
-  return user ? (
+  // ✅ اصلاح بحرانی: فقط زمانی رندر کن که بارگذاری تمام شده و کاربر وجود دارد
+  return !loading && user ? (
     <Layout>
       <Component />
     </Layout>
@@ -45,15 +52,15 @@ function Router() {
   return (
     <Switch>
       <Route path="/auth" component={AuthPage} />
-      
+
       <Route path="/">
         <ProtectedRoute component={Dashboard} />
       </Route>
-      
+
       <Route path="/closet">
         <ProtectedRoute component={ClosetPage} />
       </Route>
-      
+
       <Route path="/upload">
         <ProtectedRoute component={UploadPage} />
       </Route>
@@ -61,7 +68,7 @@ function Router() {
       <Route path="/settings">
         <ProtectedRoute component={SettingsPage} />
       </Route>
-      
+
       <Route component={NotFound} />
     </Switch>
   );
