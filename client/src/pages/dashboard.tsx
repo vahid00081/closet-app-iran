@@ -1,13 +1,33 @@
+// client/src/pages/dashboard.tsx
+
 import { WeatherWidget } from "@/components/WeatherWidget";
 import { OutfitRecommendation } from "@/components/OutfitRecommendation";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { Link } from "wouter";
 import { useTranslation } from "react-i18next";
-// Force a rebuild
+// 💡 افزودن: وارد کردن هوک آب و هوا و نوع وایب
+import { useWeather } from "@/lib/weather-context";
+import { WeatherVibe } from "@/lib/types";
 
 export default function Dashboard() {
   const { t } = useTranslation();
+  // 💡 ۱. دریافت داده‌های آب و هوا
+  const { weather, loading: weatherLoading } = useWeather();
+
+  // 💡 ۲. تابع تعیین وایب مورد نیاز بر اساس دمای فعلی
+  const getRequiredVibe = (temp?: number): WeatherVibe | null => {
+    if (temp === undefined) return null;
+
+    if (temp < 10) return "Cold";
+    if (temp >= 10 && temp < 20) return "Moderate";
+    if (temp >= 20) return "Warm";
+
+    return null;
+  };
+
+  // 💡 ۳. تعیین وایب مورد نیاز روز
+  const requiredVibe = getRequiredVibe(weather?.currentTemp);
 
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
@@ -32,7 +52,8 @@ export default function Dashboard() {
 
       <WeatherWidget />
 
-      <OutfitRecommendation />
+      {/* 💡 ۴. ارسال وایب مورد نیاز به کامپوننت پیشنهاد استایل */}
+      <OutfitRecommendation requiredVibe={requiredVibe} />
     </div>
   );
 }
